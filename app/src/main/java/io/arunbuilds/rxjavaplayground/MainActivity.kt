@@ -13,11 +13,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       val subscription =  createFromArray().subscribe{
-            arr-> println("Received array ${Arrays.toString(arr)}")
+       val subscription =  createFromRange(1,3).subscribe{
+            arr-> println("Received item is ${arr}")
         }
     }
 
     private fun createFromArray() = Observable.fromArray(arrayOf(1, 2, 3, 4, 5, 6))
+
+    private fun createFromIterable() = Observable.fromIterable(mutableListOf(1, 2, 3, 4, 5, 6))
+
+    private fun createFromRange(start:Int = 0 ,count: Int = 10) = Observable.range(start,count).repeat(3)
 }
 
