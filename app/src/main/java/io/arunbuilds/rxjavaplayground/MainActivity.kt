@@ -20,21 +20,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Timber.v("Inside onCreate:")
 
-
-      createTimeout("arun").subscribe ({
-          a->Timber.v("Data is successfully reached.")
-      },{
-          e->Timber.v("Error - ${e.message}")
-      })
+        createStartWith().subscribe{
+            a->Timber.v("the data - $a")
+        }
     }
 
-    fun createTimeout(name : String): Observable<String> = Observable.fromCallable{
-        if(name=="arun")
-            Thread.sleep(150)
-        name
-    }.timeout(100,TimeUnit.MILLISECONDS)
+    fun createDistinct() = Observable.just(1,1,3,1,2,2,1,2,1,2)
+        .distinctUntilChanged()
+    //.distinct()
 
-
-
+    fun createStartWith() = Observable.just("B","C","D","E").startWith("A")
 }
 
