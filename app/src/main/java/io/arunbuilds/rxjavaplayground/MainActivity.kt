@@ -18,15 +18,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Timber.v("onCreate")
+        Timber.v("Inside onCreate:")
 
 
-        createInterval().take(10).subscribe { a ->
+      val s =   createFilter().subscribe { a ->
             Timber.v("$a is printed")
         }
+
     }
 
 
-    private fun createInterval() = Observable.interval(1, TimeUnit.SECONDS)
+    private fun createInterval() = Observable
+        .interval(1, TimeUnit.SECONDS)
+        .takeWhile { v -> v < 20 }
+
+    private fun createTimer() = Observable
+        .timer(5, TimeUnit.SECONDS)
+
+
+    private fun createFilter() = Observable.just(1,3,4,5,6,7,8,9,10,11)
+        .filter{
+            it%2==0
+        }
 }
 
