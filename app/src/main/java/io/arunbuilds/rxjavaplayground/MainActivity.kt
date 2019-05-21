@@ -21,19 +21,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Timber.v("Inside onCreate:")
 
-        createZip().subscribe { a ->
+        createFlatMap().subscribe { a ->
             Timber.v(" data - $a")
         }
     }
 
 
-    fun createZip(): Observable<String> {
-        val firstNames = Observable.just("Arun", "akshaya", "uma")
-        val lastNames = Observable.just("Sudharsan", "Nallathambi", "maheswari")
-        return firstNames.zipWith(lastNames, BiFunction { first, last ->
-            "$first $last"
-        })
+    fun createMap() = Observable.just(1, 2, 3, 4)
+        .map { z -> z * 2 }
+
+    fun createFlatMap(): Observable<String> = Observable.just("arunm619", "drogon", "kavinlaxman", "wwe", "keerthi")
+        .flatMap { id ->
+            getUserFullName(id)
+        }
+
+    private fun getUserFullName(id: String): Observable<String> {
+        return when (id) {
+            "wwe" -> Observable.just("WWE")
+            "arunm619" -> Observable.just("Arun sudharsan")
+            "drogon" -> Observable.just("Thenmugilan")
+            "kavinlaxman" -> Observable.just("Kavin Rama Laxman")
+            else -> Observable.empty<String>()
+        }
     }
-
-
 }
