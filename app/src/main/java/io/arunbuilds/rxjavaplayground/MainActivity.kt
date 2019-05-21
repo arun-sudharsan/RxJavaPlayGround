@@ -20,15 +20,44 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Timber.v("Inside onCreate:")
 
-        createStartWith().subscribe{
-            a->Timber.v("the data - $a")
+        createConcat().subscribe{
+            a->Timber.v(" data - $a")
         }
     }
 
-    fun createDistinct() = Observable.just(1,1,3,1,2,2,1,2,1,2)
-        .distinctUntilChanged()
-    //.distinct()
+    fun createMerge(): Observable<Int> {
+        val first = Observable.just(1,2,3)
+        val second = Observable.just(4,5,6)
+        return first.mergeWith(second)
 
-    fun createStartWith() = Observable.just("B","C","D","E").startWith("A")
+    }
+
+    fun createConcat(): Observable<Int> {
+        val first = Observable.just(1,2,3)
+        val second = Observable.just(4,5,6)
+        return first.concatWith(second)
+
+    }
+
+
+    /*
+    a quick note is that if the sources are synchronous then then merge = concat
+     */
+
+   /*
+
+    Observable.merge(
+    Observable.interval(1, TimeUnit.SECONDS).map(id -> "A" + id),
+    Observable.interval(1, TimeUnit.SECONDS).map(id -> "B" + id))
+    .subscribe(System.out::println);
+    A0 B0 A1 B1 B2 A2 B3 A3 B4 A4
+
+    versus
+
+    Observable.concat(
+    Observable.interval(1, TimeUnit.SECONDS).map(id -> "A" + id),
+    Observable.interval(1, TimeUnit.SECONDS).map(id -> "B" + id))
+    .subscribe(System.out::println);
+    A0 A1 A2 A3 A4 A5 A6 A7 A8
+    */
 }
-
