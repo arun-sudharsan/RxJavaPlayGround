@@ -21,24 +21,20 @@ class MainActivity : AppCompatActivity() {
         Timber.v("Inside onCreate:")
 
 
-      val s =   createFilter().subscribe { a ->
-            Timber.v("$a is printed")
-        }
-
+      createTimeout("arun").subscribe ({
+          a->Timber.v("Data is successfully reached.")
+      },{
+          e->Timber.v("Error - ${e.message}")
+      })
     }
 
-
-    private fun createInterval() = Observable
-        .interval(1, TimeUnit.SECONDS)
-        .takeWhile { v -> v < 20 }
-
-    private fun createTimer() = Observable
-        .timer(5, TimeUnit.SECONDS)
+    fun createTimeout(name : String): Observable<String> = Observable.fromCallable{
+        if(name=="arun")
+            Thread.sleep(150)
+        name
+    }.timeout(100,TimeUnit.MILLISECONDS)
 
 
-    private fun createFilter() = Observable.just(1,3,4,5,6,7,8,9,10,11)
-        .filter{
-            it%2==0
-        }
+
 }
 
