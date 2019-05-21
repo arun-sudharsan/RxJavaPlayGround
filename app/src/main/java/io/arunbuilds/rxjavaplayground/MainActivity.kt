@@ -1,27 +1,32 @@
 package io.arunbuilds.rxjavaplayground
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Timber.v("onCreate")
 
-       val subscription =  createFromRange(1,3).subscribe{
-            arr-> println("Received item is ${arr}")
+
+        createInterval().take(10).subscribe { a ->
+            Timber.v("$a is printed")
         }
     }
 
-    private fun createFromArray() = Observable.fromArray(arrayOf(1, 2, 3, 4, 5, 6))
 
-    private fun createFromIterable() = Observable.fromIterable(mutableListOf(1, 2, 3, 4, 5, 6))
-
-    private fun createFromRange(start:Int = 0 ,count: Int = 10) = Observable.range(start,count).repeat(3)
+    private fun createInterval() = Observable.interval(1, TimeUnit.SECONDS)
 }
 
